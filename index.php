@@ -6,6 +6,6 @@
     <title>Document</title>
 </head>
 <body>
-    <h1><?php echo 'home page' ?></h1>
+    <h1><?= 'home page' ?></h1>
 </body>
 </html>
