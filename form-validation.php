@@ -4,13 +4,21 @@ use \DateTime;
 
 require __DIR__.'/vendor/autoload.php';
 
-dump($_POST);
-
 $errors = [];
 
 if ($_POST) {
+    $minLength = 3;
+    $maxLength = 10;
+
     if (empty($_POST['login'])) {
-        $errors['login'] = 'merci de remplir ce champ';
+        // le champs est-il vide ?
+        $errors['login'] = 'merci de renseigner ce champ';
+    } elseif (strlen($_POST['login']) < 3 || strlen($_POST['login']) > 10) {
+        // la longueur du login est-elle hors des limites ?
+        $errors['login'] = "merci de renseigner un login dont la longueur est comprise entre {$minLength} et {$maxLength} inclus";
+    } elseif (preg_match('/^[a-zA-Z]+$/', $_POST['login']) === 0) {
+        // le login est-il composé exclusivement de lettres de a à z, majuscules ou mnisucules ?
+        $errors['login'] = 'merci de renseigner un login composé uniquement de lettres de l\'alphabet sans accent';
     }
 
     $date = new DateTime();
@@ -18,17 +26,23 @@ if ($_POST) {
     $minYear = $maxYear - 100;
 
     if (empty($_POST['year'])) {
-        $errors['year'] = 'merci de remplir ce champ';
+        // le champs est-il vide ?
+        $errors['year'] = 'merci de renseigner ce champ';
     } elseif (!is_numeric($_POST['year'])) {
-        $errors['year'] = 'merci de remplir ce champ avec une année valide';
+        // la valeur est-elle numérique ?
+        $errors['year'] = 'merci de renseigner ce champ avec une année valide';
     } elseif ((float) $_POST['year'] - (int) $_POST['year'] != 0) {
-        $errors['year'] = 'merci de remplir ce champ avec une année valide';
+        // la valeur possède-t-elle des chiffres après la virgule ?
+        $errors['year'] = 'merci de renseigner ce champ avec une année valide';
     } elseif ($_POST['year'] <= $minYear || $_POST['year'] >= $maxYear) {
-        $errors['year'] = "merci de remplir une année comprise entre {$minYear} et {$maxYear} inclus";
+        // la valeur est-elle hors des limites ?
+        $errors['year'] = "merci de renseigner une année comprise entre {$minYear} et {$maxYear} inclus";
     }
 
     if (empty($_POST['email'])) {
-        $errors['email'] = 'merci de remplir ce champ';
+        $errors['email'] = 'merci de renseigner ce champ';
+    } elseif (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) == false) {
+        $errors['email'] = 'merci de renseigner un email valide';
     }
 }
 
