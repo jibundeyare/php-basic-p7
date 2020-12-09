@@ -78,6 +78,7 @@ if ($_POST) {
     if (!$errors) {
         $url = '/';
         header("Location: {$url}", true, 302);
+        exit();
     }
 }
 
