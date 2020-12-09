@@ -22,9 +22,20 @@ $twig = new Environment($loader, [
 $twig->addExtension(new DebugExtension());
 
 // traitement des données
+$formData = [
+    'login' => '',
+    'year' => '',
+    'email' => '@popschool.fr',
+];
 $errors = [];
 
 if ($_POST) {
+    foreach ($formData as $key => $value) {
+        if (isset($_POST[$key])) {
+            $formData[$key] = $_POST[$key];
+        }
+    }
+
     $minLength = 3;
     $maxLength = 10;
 
@@ -68,4 +79,5 @@ if ($_POST) {
 echo $twig->render('form-validation.html.twig', [
     // transmission de données au template
     'errors' => $errors,
+    'formData' => $formData,
 ]);
