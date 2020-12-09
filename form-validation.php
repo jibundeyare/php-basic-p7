@@ -73,6 +73,12 @@ if ($_POST) {
     } elseif (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) == false) {
         $errors['email'] = 'merci de renseigner un email valide';
     }
+
+    // si il n'y a pas d'erreur, on redirige l'utilisateur vers la page d'accueil
+    if (!$errors) {
+        $url = '/';
+        header("Location: {$url}", true, 302);
+    }
 }
 
 // affichage du rendu d'un template
